@@ -7,17 +7,19 @@ from classes.nave import Nave
 from classes.asteroide import Asteroide
 from classes.color import Color
 from classes.bala import Bala
+from classes.background import Background
+from classes.moeda import Moeda
 
 #congifurações globais
 from settings import *
 
 #instancias das classes
 nave = Nave()
+background = Background()
 
 run = True
 
 #delay na criacao de asteroides
-contador_frames = 0
 taxa_frames_gerar_asteroide = 60
 
 #boleano de controle: verifica quando colide
@@ -29,6 +31,9 @@ list_asteroides = []
 #lista de balas geradas
 lista_balas = []
 
+#lista de moedas
+lista_moedas = []
+
 def criar_asteroide():
     ast = Asteroide()
     list_asteroides.append(ast)
@@ -38,7 +43,6 @@ def deletar_asteroide():
     limite_asteroide = 20
     if len(list_asteroides)>=limite_asteroide:
         list_asteroides.remove(list_asteroides[0])
-
 
 def gerar_bala(nave_x, nave_y):
     bala = Bala(nave_x, nave_y)
@@ -50,9 +54,22 @@ def apagar_bala():
     if len(lista_balas)>=limite_balas:
         lista_balas.remove(lista_balas[0])
 
+def gerar_moeda():
+    moeda = Moeda()
+    lista_moedas.append(moeda)
+    deletar_moeda()
+
+def deletar_moeda():
+    limite_moedas = 20
+    if len(lista_moedas)>=limite_moedas:
+        lista_moedas.remove(lista_moedas[0])
+
 while run:
 
-    tela.blit(background, (0, 0))
+    tela.blit(
+        background.sprite, 
+        (0, 0)
+    )
     relogio.tick(FPS)
 
     for event in pygame.event.get():
@@ -61,13 +78,19 @@ while run:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 colide = False
+                taxa_frames_gerar_asteroide = 60
+                contador_frames = 0
             if event.key == pygame.K_f:
                 gerar_bala(nave.x, nave.y)
                 bala_som.play()
 
+    #incrementar o contador
+    contador_frames += 1
+
     if not colide:
-        #incrementar o contador
-        contador_frames += 1
+
+        if contador_frames%FPS*3==0:
+            gerar_moeda()
 
         nave.criarNave()
 
@@ -87,7 +110,16 @@ while run:
         #desenhar balas criadas
         for bal in lista_balas:
             bal.gerarBala()
-        
+
+        #desenhar moedas criadas
+        for moed in lista_moedas:
+            moed.criar_moeda(contador_frames)
+
+            #colisoes da nave com as moedas
+            if nave.get_rect.colliderect(moed.rect):
+                lista_moedas.remove(moed)
+                moeda_som.play()
+
 
         for ast in list_asteroides:
             #colisoes da nave com os asteroides
@@ -104,9 +136,9 @@ while run:
                         list_asteroides.remove(ast)
 
     else:
-        taxa_frames_gerar_asteroide = 60
-        contador_frames = 0
         tela.blit(game_over_img, (tela.get_width()//2-150, tela.get_height()//2-125))
+
+    background.atualizar_frames(contador_frames)
 
     pygame.display.update()
     pygame.display.flip()

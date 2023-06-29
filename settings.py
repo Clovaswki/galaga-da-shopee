@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+import os
 
 #configurar tela
 largura = 640
@@ -12,20 +13,23 @@ pygame.display.set_caption("Galaga da shoope")
 pygame.mixer.music.set_volume(.1)
 
 #music
-pygame.mixer.music.load('galaga_music.mp3')
+pygame.mixer.music.load('music/galaga_music.mp3')
 pygame.mixer.music.play(-1)
 
 #som disparo da nave
-bala_som = pygame.mixer.Sound("bala.wav")
-bala_som.set_volume(.2)
+bala_som = pygame.mixer.Sound("music/bala.wav")
+bala_som.set_volume(.3)
+
+#som de coleta de moeda
+moeda_som = pygame.mixer.Sound("music/moeda.wav")
+moeda_som.set_volume(.08)
 
 #configuracao FPS
 relogio = pygame.time.Clock()
 FPS = 60
 
-#background
-background = pygame.image.load('img/space.jpg')
-background = pygame.transform.scale(background, (tela.get_width(), tela.get_height()))
+#contar os frames durante a execuçao do jogo
+contador_frames = 0
 
 #game over
 game_over_img = pygame.image.load('img/over.png')
