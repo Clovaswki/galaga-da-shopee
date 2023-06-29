@@ -1,5 +1,6 @@
 import pygame
-from settings import tela
+from settings import *
+from utils.criar_frames import criar_frames
 
 class Nave:
 
@@ -8,13 +9,25 @@ class Nave:
         self.altura = 50
         self.x = tela.get_width()//2-self.largura//2#posicionar no centro
         self.y = tela.get_height()-self.altura#posicionar no final
-        self.img = pygame.transform.scale(pygame.image.load('img/nave.png'), (self.largura, self.altura))
-        self.rect = pygame.mask.from_surface(self.img)
         self.quant_vida = 3
+        self.frames = criar_frames('img/frames_nave/', self.largura, self.altura)
+        self.atual = 0
+        self.sprite = self.frames[self.atual]
+        self.rect = pygame.mask.from_surface(self.sprite)
 
-    def criar_nave(self):
-        tela.blit(self.img, (self.x, self.y))
+    def criar_nave(self, contador_frames):
+        tela.blit(self.sprite, (self.x, self.y))
         self.mover_nave()
+        self.atualizar_frames(contador_frames)
+
+    def atualizar_frames(self, contador_frames):
+        if self.atual==len(self.frames)-1:
+            self.atual=0
+        
+        if contador_frames%(60/4)==0:
+            self.atual+=1
+        
+        self.sprite= self.frames[self.atual]
 
     def mover_nave(self):
         

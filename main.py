@@ -8,6 +8,12 @@ from settings import *
 #functions do jogo
 from functions_game import *
 
+#telas
+from telas.tela_inicial import Tela_inicial
+
+#instacia das telas
+tela_inicial = Tela_inicial()
+
 #instancias das classes
 nave = Nave()
 background = Background()
@@ -21,8 +27,7 @@ run = True
 #delay na criacao de asteroides
 taxa_frames_gerar_asteroide = 60
 
-#boleano de controle: verifica quando colide
-colide = False
+tela_escolhida = "main"
 
 #lista de asteroides gerados
 list_asteroides = []
@@ -49,12 +54,12 @@ while run:
             run = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                if colide:
-                    colide = False
+                if tela_escolhida=='gameover':
                     taxa_frames_gerar_asteroide = 60
                     contador_frames = 0
                     nave = Nave()
                     pygame.mixer.music.play(-1)
+                    tela_escolhida="main"
             if event.key == pygame.K_f:
                 gerar_bala(lista_balas, nave.x, nave.y)
                 bala_som.play()
@@ -62,7 +67,7 @@ while run:
     #incrementar o contador
     contador_frames += 1
 
-    if not colide:
+    if tela_escolhida=='main':
 
         #desenhar cards
         barra_vida.criar_barra_vida()
@@ -72,7 +77,7 @@ while run:
         if contador_frames%(FPS*1)==0:
             gerar_moeda(lista_moedas)
 
-        nave.criar_nave()
+        nave.criar_nave(contador_frames)
 
         #aumenta a densidade de asteroides a cada 10 segundos
         if contador_frames%(10*FPS)==0:
@@ -116,7 +121,7 @@ while run:
                 barra_vida.diminuir_vida()
                 if nave.quant_vida == 0:
                     list_asteroides = []
-                    colide = True
+                    tela_escolhida = 'gameover'
                     barra_vida.reset()
                     barra_moeda.reset()
                     pygame.mixer.music.stop()
@@ -128,9 +133,12 @@ while run:
                     if ast in list_asteroides:
                         list_asteroides.remove(ast)
     
-    else:
+    elif tela_escolhida=="gameover":
         tela.blit(game_over_img, (tela.get_width()//2-150, tela.get_height()//2-125))
+    else:
+        tela.blit(tela_inicial.sprite, (0, 0))
 
+    tela_inicial.atualizar_frames(contador_frames)
     background.atualizar_frames(contador_frames)
     pygame.display.update()
     pygame.display.flip()
