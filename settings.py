@@ -12,6 +12,16 @@ pygame.init()
 pygame.display.set_caption("Galaga da shoope")
 pygame.mixer.music.set_volume(.1)
 
+#classes
+from classes.nave import Nave
+from classes.asteroide import Asteroide
+from classes.bala import Bala
+from classes.background import Background
+from classes.moeda import Moeda
+from cards.barra_vida import Barra_vida
+from cards.barra_moeda import Barra_moeda
+from classes.explosao import Explosao
+
 #music
 pygame.mixer.music.load('music/galaga_music.mp3')
 pygame.mixer.music.play(-1)

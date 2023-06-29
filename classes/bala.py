@@ -10,15 +10,12 @@ class Bala:
         self.x = nave_x+self.largura*2
         self.y = nave_y-self.altura
         self.img = pygame.transform.scale(pygame.image.load('img/bala.png'), (self.largura, self.altura))
-        self.get_rect = self.img.get_rect()
+        self.rect = pygame.mask.from_surface(self.img)
         self.velocidade_bala = 10
 
-    def gerarBala(self):
+    def gerar_bala(self):
         tela.blit(self.img, (self.x, self.y))
-        self.get_rect.x, self.get_rect.y = self.x, self.y
-        self.moverBala()
-        return self.get_rect
+        self.mover_bala()
 
-    def moverBala(self):
-
+    def mover_bala(self):
         self.y -= self.velocidade_bala

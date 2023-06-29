@@ -1,7 +1,6 @@
 import pygame
 from random import randint
 from settings import tela
-from classes.color import Color
 
 class Asteroide:
 
@@ -9,17 +8,14 @@ class Asteroide:
         self.valor_aleatorio = randint(40, 60)
         self.largura = self.valor_aleatorio
         self.altura = self.valor_aleatorio
-        self.x = randint(10, tela.get_width())
+        self.x = randint(10, tela.get_width()-self.largura)
         self.y = -20
         self.img = pygame.transform.scale(pygame.image.load('img/asteroide.png'), (self.largura, self.altura))
-        self.get_rect = self.img.get_rect()
+        self.rect = pygame.mask.from_surface(self.img)
 
-    def criarAsteroide(self):
-        rect = tela.blit(self.img, (self.x, self.y))
-        self.movimentarAsteroide()
-        self.get_rect.x = self.x
-        self.get_rect.y = self.y
-        return rect
-    
-    def movimentarAsteroide(self):
+    def criar_asteroide(self):
+        tela.blit(self.img, (self.x, self.y))
+        self.movimentar_asteroide()
+
+    def movimentar_asteroide(self):
         self.y += 5

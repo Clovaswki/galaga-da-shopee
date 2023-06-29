@@ -9,17 +9,14 @@ class Nave:
         self.x = tela.get_width()//2-self.largura//2#posicionar no centro
         self.y = tela.get_height()-self.altura#posicionar no final
         self.img = pygame.transform.scale(pygame.image.load('img/nave.png'), (self.largura, self.altura))
-        self.get_rect = self.img.get_rect()
+        self.rect = pygame.mask.from_surface(self.img)
         self.quant_vida = 3
 
-    def criarNave(self):
+    def criar_nave(self):
         tela.blit(self.img, (self.x, self.y))
-        self.moverNave()
-        self.get_rect.x = self.x
-        self.get_rect.y = self.y
-        return self.get_rect
+        self.mover_nave()
 
-    def moverNave(self):
+    def mover_nave(self):
         
         keys = pygame.key.get_pressed()
 
