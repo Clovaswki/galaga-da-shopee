@@ -4,7 +4,7 @@ from settings import *
 class Barra_vida:
 
     def __init__(self):
-        self.frames = criar_frames('img/frames_barra_vida/', 120, 30)
+        self.frames = criar_frames('img/frames_barra_vida/', 167, 18)
         self.atual = 0
         self.image = self.frames[self.atual]
 

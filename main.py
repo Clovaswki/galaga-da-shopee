@@ -12,7 +12,7 @@ from functions_game import *
 from telas.tela_inicial import Tela_inicial
 
 #instacia das telas
-tela_inicial = Tela_inicial()
+tela_inicial = Tela_inicial(contador_frames=contador_frames)
 
 #instancias das classes
 nave = Nave()
@@ -27,7 +27,7 @@ run = True
 #delay na criacao de asteroides
 taxa_frames_gerar_asteroide = 60
 
-tela_escolhida = "main"
+tela_escolhida = "tela_inicial"
 
 #lista de asteroides gerados
 list_asteroides = []
@@ -43,10 +43,6 @@ lista_explosoes = []
 
 while run:
 
-    tela.blit(
-        background.sprite, 
-        (0, 0)
-    )
     relogio.tick(FPS)
 
     for event in pygame.event.get():
@@ -58,16 +54,28 @@ while run:
                     taxa_frames_gerar_asteroide = 60
                     contador_frames = 0
                     nave = Nave()
+                    list_asteroides = []
+                    lista_balas = []
+                    lista_moedas = []
                     pygame.mixer.music.play(-1)
                     tela_escolhida="main"
             if event.key == pygame.K_f:
-                gerar_bala(lista_balas, nave.x, nave.y)
-                bala_som.play()
+                if tela_escolhida=='main':
+                    gerar_bala(lista_balas, nave.x, nave.y)
+                    bala_som.play()
+            if event.key == pygame.K_r:
+                if tela_escolhida=="tela_inicial":
+                    tela_escolhida = 'main'
 
     #incrementar o contador
     contador_frames += 1
 
     if tela_escolhida=='main':
+
+        tela.blit(
+            background.sprite, 
+            (0, 0)  
+        )
 
         #desenhar cards
         barra_vida.criar_barra_vida()
@@ -136,9 +144,8 @@ while run:
     elif tela_escolhida=="gameover":
         tela.blit(game_over_img, (tela.get_width()//2-150, tela.get_height()//2-125))
     else:
-        tela.blit(tela_inicial.sprite, (0, 0))
+        tela_inicial.iniciar()
 
-    tela_inicial.atualizar_frames(contador_frames)
     background.atualizar_frames(contador_frames)
     pygame.display.update()
     pygame.display.flip()

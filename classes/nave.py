@@ -9,7 +9,7 @@ class Nave:
         self.altura = 50
         self.x = tela.get_width()//2-self.largura//2#posicionar no centro
         self.y = tela.get_height()-self.altura#posicionar no final
-        self.quant_vida = 3
+        self.quant_vida = 4
         self.frames = criar_frames('img/frames_nave/', self.largura, self.altura)
         self.atual = 0
         self.sprite = self.frames[self.atual]
