@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import *
-import os
 
 #configurar tela
 largura = 640
@@ -21,10 +20,21 @@ from classes.moeda import Moeda
 from cards.barra_vida import Barra_vida
 from cards.barra_moeda import Barra_moeda
 from classes.explosao import Explosao
+from classes.nave_inimiga import Nave_inimiga
+from classes.bala_inimiga import Bala_inimiga
 
-#music
-pygame.mixer.music.load('music/galaga_music.mp3')
+musics = {
+    "tela_inicial": 'music/musica_tela_inicial.mp3', 
+    "jogo": 'music/galaga_music.mp3'
+}
+
+#musica da tela inicial
+pygame.mixer.music.load(musics["tela_inicial"])
 pygame.mixer.music.play(-1)
+
+#cards
+barra_vida = Barra_vida()
+barra_moeda = Barra_moeda()
 
 #som disparo da nave
 bala_som = pygame.mixer.Sound("music/bala.wav")
@@ -34,13 +44,14 @@ bala_som.set_volume(.3)
 moeda_som = pygame.mixer.Sound("music/moeda.wav")
 moeda_som.set_volume(.08)
 
+#som de perda de vida
+perder_vida_som = pygame.mixer.Sound("music/perda_vida.wav")
+perder_vida_som.set_volume(.1)
+
+#som game over
+game_over_som = pygame.mixer.Sound('music/game_over.wav')
+game_over_som.set_volume(.2)
+
 #configuracao FPS
 relogio = pygame.time.Clock()
 FPS = 60
-
-#contar os frames durante a execuçao do jogo
-contador_frames = 0
-
-#game over
-game_over_img = pygame.image.load('img/over.png')
-game_over_img = pygame.transform.scale(game_over_img, (300, 250))

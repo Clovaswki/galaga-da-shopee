@@ -1,5 +1,5 @@
-from settings import *
 import pygame
+from settings import *
 
 class Barra_moeda:
 
@@ -18,7 +18,7 @@ class Barra_moeda:
         tela.blit(self.render_moedas(), (self.x+self.largura-60, self.y+11))
 
     def render_moedas(self):
-        return self.font.render(str(self.num_moedas), True, (0, 0, 0))
+        return self.font.render(str(self.num_moedas), False, (0, 0, 0))
 
     def aumentar_moedas(self):
         self.num_moedas+=1

@@ -1,6 +1,6 @@
-import pygame
 from settings import *
 from utils.criar_frames import criar_frames
+import pygame
 
 class Background:
 

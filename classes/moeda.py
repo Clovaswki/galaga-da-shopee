@@ -1,7 +1,7 @@
-import pygame
-from settings import *
 from utils.criar_frames import criar_frames
 from random import randint
+from settings import *
+import pygame
 
 class Moeda:
     

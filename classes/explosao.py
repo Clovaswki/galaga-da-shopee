@@ -1,17 +1,17 @@
-from settings import tela
 from utils.criar_frames import criar_frames
 from settings import *
+import pygame
 
 class Explosao:
 
-    def __init__(self, largura_obj, altura_obj, x_obj, y_obj):
-        self.largura = largura_obj
-        self.altura = altura_obj
+    def __init__(self, obj):
+        self.largura = obj.largura
+        self.altura = obj.altura
         self.frames = criar_frames('img/frames_asteroide/', self.largura, self.altura)
         self.atual = 0
         self.sprite = self.frames[self.atual]
-        self.x = x_obj
-        self.y = y_obj
+        self.x = obj.x
+        self.y = obj.y
         self.cont = 0#gerenciar o tempo de existencia da explosao
 
     def criar_explosao(self, contador_frames):

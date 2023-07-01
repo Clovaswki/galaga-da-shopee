@@ -1,6 +1,5 @@
-import pygame
 from settings import *
-from classes.color import Color
+import pygame
 
 class Bala:
 

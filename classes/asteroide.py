@@ -1,6 +1,6 @@
-import pygame
 from random import randint
-from settings import tela
+from settings import *
+import pygame
 
 class Asteroide:
 

@@ -10,24 +10,26 @@ from functions_game import *
 
 #telas
 from telas.tela_inicial import Tela_inicial
+from telas.tela_jogo import tela_jogo
+from telas.tela_game_over import Tela_game_over
+
+tela_escolhida = "tela_inicial"
+
+#contar os frames durante a execuçao do jogo
+contador_frames = 0
 
 #instacia das telas
 tela_inicial = Tela_inicial(contador_frames=contador_frames)
+tela_game_over = Tela_game_over()
 
 #instancias das classes
 nave = Nave()
 background = Background()
 
-#cards
-barra_vida = Barra_vida()
-barra_moeda = Barra_moeda()
-
 run = True
 
 #delay na criacao de asteroides
 taxa_frames_gerar_asteroide = 60
-
-tela_escolhida = "tela_inicial"
 
 #lista de asteroides gerados
 list_asteroides = []
@@ -41,6 +43,12 @@ lista_moedas = []
 #lista de explosoes
 lista_explosoes = []
 
+#lista de balas inimigas
+lista_balas_inimigas = []
+
+#lista de naves inimigas
+lista_naves_inimigas = []
+
 while run:
 
     relogio.tick(FPS)
@@ -49,16 +57,6 @@ while run:
         if event.type == pygame.QUIT:
             run = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                if tela_escolhida=='gameover':
-                    taxa_frames_gerar_asteroide = 60
-                    contador_frames = 0
-                    nave = Nave()
-                    list_asteroides = []
-                    lista_balas = []
-                    lista_moedas = []
-                    pygame.mixer.music.play(-1)
-                    tela_escolhida="main"
             if event.key == pygame.K_f:
                 if tela_escolhida=='main':
                     gerar_bala(lista_balas, nave.x, nave.y)
@@ -66,83 +64,55 @@ while run:
             if event.key == pygame.K_r:
                 if tela_escolhida=="tela_inicial":
                     tela_escolhida = 'main'
+                    pygame.mixer.music.load(musics["jogo"])
+                    pygame.mixer.music.play(-1)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if tela_escolhida=='gameover':
+                taxa_frames_gerar_asteroide = 60
+                contador_frames = 0
+                nave = Nave()
+                list_asteroides = []
+                lista_balas = []
+                lista_moedas = []
+                lista_balas_inimigas = []
+                lista_naves_inimigas = []
+                lista_explosoes = []
+                if tela_game_over.click_btn_reset():
+                    tela_escolhida="main"
+                    pygame.mixer.music.play(-1)
+                if tela_game_over.click_btn_tela_inicial():
+                    tela_escolhida="tela_inicial"   
+        
+
 
     #incrementar o contador
     contador_frames += 1
-
     if tela_escolhida=='main':
-
-        tela.blit(
-            background.sprite, 
-            (0, 0)  
-        )
-
-        #desenhar cards
-        barra_vida.criar_barra_vida()
-        barra_moeda.criar_barra_moeda()
-
-        #criar moeda a cada quant. de frames
-        if contador_frames%(FPS*1)==0:
-            gerar_moeda(lista_moedas)
-
-        nave.criar_nave(contador_frames)
 
         #aumenta a densidade de asteroides a cada 10 segundos
         if contador_frames%(10*FPS)==0:
-            if taxa_frames_gerar_asteroide > 5:
-                taxa_frames_gerar_asteroide = taxa_frames_gerar_asteroide/2
+            if taxa_frames_gerar_asteroide/2 >= 5:
+                taxa_frames_gerar_asteroide *= 0.5
 
-        #criar asteroides de acordo a qtde de frames escolhidos
-        if contador_frames%taxa_frames_gerar_asteroide==0:
-            criar_asteroide(list_asteroides)
+        #checar se é game over
+        if nave.quant_vida == 0:
+            tela_escolhida = 'gameover'
 
-        #desenhar explosoes
-        for exp in lista_explosoes:
-            #se a explosao passar de 15 frames, deixa de existir
-            if not exp.cont >= (FPS/4):
-                exp.criar_explosao(contador_frames)
+        tela_jogo(
+            nave=nave,
+            background=background,
+            lista_asteroides=list_asteroides,
+            lista_balas=lista_balas,
+            lista_moedas=lista_moedas,
+            lista_explosoes=lista_explosoes,
+            taxa_frames_gerar_asteroide=taxa_frames_gerar_asteroide,
+            contador_frames=contador_frames,
+            lista_balas_inimigas=lista_balas_inimigas,
+            lista_naves_inimigas=lista_naves_inimigas
+        )
 
-        #desenhar asteroides criados
-        for ast in list_asteroides:
-            ast.criar_asteroide()
-        
-        #desenhar balas criadas
-        for bal in lista_balas:
-            bal.gerar_bala()
-
-        #desenhar moedas criadas
-        for moed in lista_moedas:
-            moed.criar_moeda(contador_frames)
-
-            #colisoes da nave com as moedas
-            if nave.rect.overlap(moed.rect, (moed.x-nave.x, moed.y-nave.y)):
-                lista_moedas.remove(moed)
-                moeda_som.play()
-                barra_moeda.aumentar_moedas()
-
-        for ast in list_asteroides:
-            #colisoes da nave com os asteroides
-            if ast.rect.overlap(nave.rect, (ast.x-nave.x, ast.y-nave.y)):
-            # if nave.get_rect.colliderect(ast.get_rect):
-                list_asteroides.remove(ast)
-                nave.quant_vida = nave.quant_vida -1
-                barra_vida.diminuir_vida()
-                if nave.quant_vida == 0:
-                    list_asteroides = []
-                    tela_escolhida = 'gameover'
-                    barra_vida.reset()
-                    barra_moeda.reset()
-                    pygame.mixer.music.stop()
-            #colisoes da bala com os asteroides
-            for bal in lista_balas:
-                if bal.rect.overlap(ast.rect, (ast.x-bal.x, ast.y-bal.y)):
-                    criar_explosao(lista_explosoes, ast.largura, ast.altura, ast.x, ast.y)
-                    lista_balas.remove(bal)
-                    if ast in list_asteroides:
-                        list_asteroides.remove(ast)
-    
     elif tela_escolhida=="gameover":
-        tela.blit(game_over_img, (tela.get_width()//2-150, tela.get_height()//2-125))
+        tela_game_over.criar_game_over()
     else:
         tela_inicial.iniciar()
 
