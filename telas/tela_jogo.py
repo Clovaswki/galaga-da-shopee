@@ -28,6 +28,9 @@ def tela_jogo(
 
     if contador_frames>(FPS*60):
         #sera implementado depois de um minuto de jogo
+        #criar naves inimigas
+        if contador_frames%(FPS*2)==0:
+            criar_nave_inimiga(lista_naves_inimigas)
         #criar balas inimigas a cada meio segundo
         if contador_frames%(FPS*0.5)==0:
             if len(lista_naves_inimigas)>0:
@@ -35,9 +38,6 @@ def tela_jogo(
                     lista_balas_inimigas, 
                     nave=lista_naves_inimigas[randint(0, len(lista_naves_inimigas)-1)]
                 )
-        #criar naves inimigas
-        if contador_frames%(FPS*2)==0:
-            criar_nave_inimiga(lista_naves_inimigas)
 
     else:
         #funcionara ate um minuto de jogo
@@ -45,11 +45,9 @@ def tela_jogo(
         if contador_frames%taxa_frames_gerar_asteroide==0:
             criar_asteroide(list_asteroides=lista_asteroides)
 
-        
     #criar moeda a cada quant. de frames
     if contador_frames%(FPS*1)==0:
         gerar_moeda(lista_moedas)
-
 
     #desenhar naves inimigas
     for nave_inimiga in lista_naves_inimigas:
@@ -66,7 +64,8 @@ def tela_jogo(
     for bal in lista_balas_inimigas:
         bal.gerar_bala()
         #colisao das balas inimigas com a nave do bem
-        if bal.rect.overlap(nave.rect, (bal.x-nave.x, bal.y-nave.y)):
+        # if bal.rect.overlap(nave.rect, (bal.x-nave.x, bal.y-nave.y)):
+        if bal.rect.overlap(nave.rect, (nave.x-bal.x, nave.y-bal.y)):
             lista_balas_inimigas.remove(bal)
             nave.quant_vida = nave.quant_vida -1
             barra_vida.diminuir_vida()
@@ -123,7 +122,6 @@ def tela_jogo(
 
     #checar se a vida acabou
     if nave.quant_vida == 0:
-        lista_asteroides = []
         barra_vida.reset()
         barra_moeda.reset()
         pygame.mixer.music.stop()

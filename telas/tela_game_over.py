@@ -1,4 +1,5 @@
 from settings import *
+from classes.color import Color
 
 class Tela_game_over:
 
@@ -9,6 +10,9 @@ class Tela_game_over:
         self.btn_reset = pygame.image.load('img/game_over/btn_reset.png')
         self.btn_tela_inicial = pygame.image.load('img/game_over/btn_tela_inicial.png')
         
+        #icon de seletor de btn
+        self.seletor = pygame.image.load('img/select.png')
+
         #rects buttons
         self.rect_btn_reset = self.btn_reset.get_rect()
         self.rect_btn_tela_inicial = self.btn_tela_inicial.get_rect()

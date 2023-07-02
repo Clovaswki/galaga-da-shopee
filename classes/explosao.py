@@ -7,7 +7,7 @@ class Explosao:
     def __init__(self, obj):
         self.largura = obj.largura
         self.altura = obj.altura
-        self.frames = criar_frames('img/frames_asteroide/', self.largura, self.altura)
+        self.frames = criar_frames('img/frames_explosao/', self.largura, self.altura)
         self.atual = 0
         self.sprite = self.frames[self.atual]
         self.x = obj.x

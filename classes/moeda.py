@@ -10,7 +10,6 @@ class Moeda:
         self.altura = 30
         self.frames = criar_frames('img/frames_moeda/', largura=30, altura=30)
         self.atual_index = 0
-        self.number_frames = len(self.frames)
         self.sprite = self.frames[self.atual_index]
         self.rect = pygame.mask.from_surface(self.sprite)
         self.x = randint(0, tela.get_width()-self.largura)
@@ -28,7 +27,7 @@ class Moeda:
         if contador_frames%7==0:
             self.atual_index+=1
 
-        if self.atual_index==self.number_frames-1:
+        if self.atual_index==len(self.frames)-1:
             self.atual_index=0
 
         self.sprite = self.frames[self.atual_index]

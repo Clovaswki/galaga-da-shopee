@@ -9,7 +9,6 @@ tela = pygame.display.set_mode((largura, altura))
 #inicializando a lib
 pygame.init()
 pygame.display.set_caption("Galaga da shoope")
-pygame.mixer.music.set_volume(.1)
 
 #classes
 from classes.nave import Nave

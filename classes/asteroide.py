@@ -9,7 +9,7 @@ class Asteroide:
         self.largura = self.valor_aleatorio
         self.altura = self.valor_aleatorio
         self.x = randint(10, tela.get_width()-self.largura)
-        self.y = -20
+        self.y = -self.altura
         self.img = pygame.transform.scale(pygame.image.load('img/asteroide.png'), (self.largura, self.altura))
         self.rect = pygame.mask.from_surface(self.img)
 

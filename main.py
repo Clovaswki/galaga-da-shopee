@@ -82,11 +82,12 @@ while run:
                     pygame.mixer.music.play(-1)
                 if tela_game_over.click_btn_tela_inicial():
                     tela_escolhida="tela_inicial"   
-        
-
+                    pygame.mixer.music.load(musics["tela_inicial"])
+                    pygame.mixer.music.play(-1)
 
     #incrementar o contador
     contador_frames += 1
+    
     if tela_escolhida=='main':
 
         #aumenta a densidade de asteroides a cada 10 segundos
