@@ -64,7 +64,6 @@ def tela_jogo(
     for bal in lista_balas_inimigas:
         bal.gerar_bala()
         #colisao das balas inimigas com a nave do bem
-        # if bal.rect.overlap(nave.rect, (bal.x-nave.x, bal.y-nave.y)):
         if bal.rect.overlap(nave.rect, (nave.x-bal.x, nave.y-bal.y)):
             lista_balas_inimigas.remove(bal)
             nave.quant_vida = nave.quant_vida -1

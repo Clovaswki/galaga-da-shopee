@@ -66,6 +66,7 @@ while run:
                     tela_escolhida = 'main'
                     pygame.mixer.music.load(musics["jogo"])
                     pygame.mixer.music.play(-1)
+                    pygame.mixer.music.set_volume(.3)
         if event.type == pygame.MOUSEBUTTONDOWN:
             if tela_escolhida=='gameover':
                 taxa_frames_gerar_asteroide = 60
